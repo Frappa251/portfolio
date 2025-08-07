@@ -3,7 +3,10 @@
     --color-text: #e0e0e0;            /* Testo chiaro neutro */
     --color-accent: #00e0ff;          /* Azzurro neon */
     --color-pink-accent: #ff2fd0;     /* Rosa neon */
-     --color-border: #2c2c2c;          /* Bordo grigio scuro */
+    --color-border: #2c2c2c;          /* Bordo grigio scuro */
+    max-width: none;
+    margin: 0;
+    padding: 0;
 }
 
 body {
@@ -17,7 +20,7 @@ body {
 /* HERO SECTION */
 #hero {
     height: 100vh;
-    background: url('immagini/hero-bg.jpg') no-repeat center center/cover;
+    background: url('/hero-bg.jpg') no-repeat center center/cover;
     z-index: 0;
     position: relative;
     display: flex;
@@ -102,15 +105,15 @@ body {
 }
 
 .contact-icons a {
-  margin: 0 10px;
-  color: var(--color-accent);
-  font-size: 28px;
-  transition: transform 0.3s ease, color 0.3s ease, text-shadow 0.3s ease;
+     margin: 0 10px;
+    color: var(--color-accent);
+    font-size: 28px;
+    transition: transform 0.3s ease, color 0.3s ease, text-shadow 0.3s ease;
 }
 .contact-icons a:hover {
-  color: var(--color-pink-accent);
-  transform: scale(1.2);
-  text-shadow: 0 0 8px var(--color-pink-accent);
+    color: var(--color-pink-accent);
+    transform: scale(1.2);
+    text-shadow: 0 0 8px var(--color-pink-accent);
 }
 
 /* SEZIONI CENTRALI */
@@ -188,10 +191,10 @@ footer {
 /* BIOGRAFIA */
 #about {
     background-color: #fdf6ed;
-    padding: 100px 20px 60px;
+    padding: 80px 20px 60px;
     text-align: center;
     border-top: 1px solid var(--color-accent);
-    margin-top: -60px;
+    margin-top: -40px;
     position: relative;
     z-index: 2;
     opacity: 0;
