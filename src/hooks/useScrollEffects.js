@@ -9,12 +9,54 @@ export function useScrollEffects() {
         const sections   = document.querySelectorAll('section');
         const navLinks   = sideNav?.querySelectorAll('a') ?? [];
 
+        navLinks.forEach(a => {
+            a.addEventListener('click', (e) => {
+                const href = a.getAttribute('href');
+                if (href?.startsWith('#')) {
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                }
+            });
+        });
+
         const maxScaleScroll = 300;
         const minScale       = 0.7;
 
+        let collapsed = false;
+        let aboutTop0 = null;
+
+        function measureAboutTop() {
+            if (!about) return;
+
+            //se la hero è collassata, ovvio che sei coglione, la baseline deve includere
+            //l'altezza della hero aperta, altrimenti ritorna negativa
+            const raw = about.offsetTop;
+            const heroOpenHeight = window.innerHeight;
+            aboutTop0 = collapsed ? raw + heroOpenHeight : raw;
+        }
+        
+        measureAboutTop();
+        window.addEventListener('resize', measureAboutTop)
+
         function onScroll() {
             const y        = window.scrollY;
-            const aboutTop = about ? about.offsetTop : Infinity;
+            
+            //la hero si riapre anche se avevo ripristinato lo scroll e baseline era sbagliata
+            if (collapsed && y < 120 && hero) {
+                hero.classList.remove('collapsed');
+                collapsed = false;
+                measureAboutTop();
+            }
+
+            /* se la baseline non è impostata, fra impostala ora e USALA */
+            if (about && aboutTop0 === null) aboutTop0 = about.offsetTop;
+            const aboutTop = (aboutTop0 !== null) ? aboutTop0 : Infinity;
 
             /* -- scala progressiva titolo Hero -- */
             if (heroContent) {
@@ -22,24 +64,24 @@ export function useScrollEffects() {
                 heroContent.style.transform = `scale(${scale})`;
             }
 
-            /* -- classi Hero (fading / shrinking / collapsed) -- */
+            /* -- classi Hero (fading / shrinking) -- */
             if (hero) {
                 hero.classList.toggle('fading',    y > 50);
                 hero.classList.toggle('shrinking', y > 100 && y < aboutTop - 50);
+            }
 
-                /* gestione collasso con isteresi */
-                if (!window.__heroCollapsed) window.__heroCollapsed = false;   // flag globale
-                const collapseAt = aboutTop - 50;   // soglia in discesa
-                const expandAt   = aboutTop - 250;  // soglia in risalita (200 px sopra)
+            if (about && hero) {
+                const collapseAt = aboutTop - 50;
+                const expandAt = aboutTop - 250;
 
-                if (!window.__heroCollapsed && y >= collapseAt) {
+                if (!collapsed && y >= collapseAt) {
                     hero.classList.add('collapsed');
-                    window.__heroCollapsed = true;
+                    collapsed = true;
                 }
-        
-                if (window.__heroCollapsed && y < expandAt) {
-                hero.classList.remove('collapsed');
-                window.__heroCollapsed = false;
+                if (collapsed && y < expandAt) {
+                    hero.classList.remove('collapsed');
+                    collapsed = false;
+                    measureAboutTop();
                 }
             }
 
@@ -66,9 +108,14 @@ export function useScrollEffects() {
         }
 
         window.addEventListener('scroll', onScroll);
-        /* prima invocazione per stato iniziale */
-        onScroll();
+        onScroll(); // stato iniziale
 
-        return () => window.removeEventListener('scroll', onScroll);
+        return () => {
+            navLinks.forEach(a => {
+                a.replaceWith(a.cloneNode(true)); //rimuove eventuali listener
+            });
+            window.removeEventListener('scroll', onScroll);
+            window.removeEventListener('resize', measureAboutTop);
+        };
     }, []);
 }

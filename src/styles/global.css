@@ -229,3 +229,32 @@ footer {
     text-shadow: 0 0 4px rgba(0, 224, 255, 0.2);
 }
 
+#projects, #contact {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 80px 20px 100px;
+}
+
+#projects h2, #contact h2 {
+    color: var(--color-accent);
+    font-size: 32px;
+    margin-bottom: 20px;
+}
+
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minimax(220px, 1fr));
+    gap: 16px;
+    margin-top: 16px;
+}
+
+.project-card {
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.02);
+}
+
+html {
+    scroll-behavior: smooth;
+}
