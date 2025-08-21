@@ -1,12 +1,57 @@
-# React + Vite
+# Personal Portfolio (React + Vite)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A fast, minimalist portfolio to showcase my projects, skills and contacts.
 
-Currently, two official plugins are available:
+![License](https://img.shields.io/github/license/Frappa251/portfolio)
+![Last Commit](https://img.shields.io/github/last-commit/Frappa251/portfolio)
+![Repo Size](https://img.shields.io/github/repo-size/Frappa251/portfolio)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## ✨ Features
+- Responsive layout
+- Smooth section transitions/animations
+- Projects, About, Contact sections
+- Clean, neon-dark theme
 
-## Expanding the ESLint configuration
+## 🛠 Tech Stack
+- React + Vite
+- JavaScript/TypeScript
+- CSS
+- Framer Motion for animations
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🚀 Quick Start (Local)
+
+```bash
+# Clone
+git clone https://github.com/Frappa251/portfolio.git
+cd portfolio
+
+# Install deps
+npm install
+
+# Dev server
+npm run dev
+
+# Production build
+npm run build
+
+# Preview production build
+npm run preview
+```
+
+🗺️ Project Structure (short)
+src/
+  components/
+  pages/
+  assets/
+  main.(ts|jsx)
+  App.(ts|jsx)
+  
+📄 License
+This project is licensed under the MIT License – see LICENSE.
+
+📫 Contact
+Email: francescosaverio2004@gmail.com
+
+LinkedIn: www.linkedin.com/in/francesco-saverio-cioeta-61b35b2a1
+
+Telegram: https://t.me/Frappa_251
