@@ -39,19 +39,21 @@ npm run preview
 ```
 
 🗺️ Project Structure (short)
+```txt
 src/
   components/
   pages/
   assets/
   main.(ts|jsx)
   App.(ts|jsx)
+```
   
-📄 License
-This project is licensed under the MIT License – see LICENSE.
+```markdown
+## 📄 License
+This project is licensed under the MIT License – see [LICENSE](./LICENSE).
 
-📫 Contact
-Email: francescosaverio2004@gmail.com
-
-LinkedIn: www.linkedin.com/in/francesco-saverio-cioeta-61b35b2a1
-
-Telegram: https://t.me/Frappa_251
+## 📫 Contact
+- **Email:** [francescosaverio2004@gmail.com](mailto:francescosaverio2004@gmail.com)  
+- **LinkedIn:** [Francesco Saverio Cioeta](https://www.linkedin.com/in/francesco-saverio-cioeta-61b35b2a1/)
+- **Telegram:** [@Frappa_251](https://t.me/Frappa_251)
+```
