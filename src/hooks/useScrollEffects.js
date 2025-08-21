@@ -34,7 +34,7 @@ export function useScrollEffects() {
         function measureAboutTop() {
             if (!about) return;
 
-            //se la hero è collassata, ovvio che sei coglione, la baseline deve includere
+            //se la hero è collassata, la baseline deve includere
             //l'altezza della hero aperta, altrimenti ritorna negativa
             const raw = about.offsetTop;
             const heroOpenHeight = window.innerHeight;
@@ -112,7 +112,7 @@ export function useScrollEffects() {
 
         return () => {
             navLinks.forEach(a => {
-                a.replaceWith(a.cloneNode(true)); //rimuove eventuali listener
+                a.replaceWith(a.cloneNode(true)); // rimuovi listener se ci sono
             });
             window.removeEventListener('scroll', onScroll);
             window.removeEventListener('resize', measureAboutTop);

@@ -14,7 +14,7 @@ function App() {
       <About />
       <Projects />
       <Contact />
-      {/* Altri componenti: About, Projects, Contact, ecc. */}
+      {/* Altri componenti se ti vengono in mente */}
     </>
   );
 }
