@@ -1,15 +1,23 @@
 @import "tailwindcss";
 
 @theme {
-  /* Neon Dark palette */
-  --color-bg: #0a0a0a;
-  --color-bg-elev: #111114;
-  --color-surface: #16161b;
-  --color-border: #24242c;
+  /* Neon Dark — cyber HUD palette */
+  --color-bg: #05060c;
+  --color-bg-elev: #0a0c14;
+  --color-surface: #10121d;
+  --color-border: #1e2130;
   --color-muted: #9aa0a6;
 
-  --color-neon-cyan: #00e0ff;
-  --color-neon-pink: #ff2fd0;
+  /* Section canvases: ink = page-level black-blue, inkpanel = HUD panel fill */
+  --color-ink: #05060c;
+  --color-inkpanel: #0b0d17;
+
+  --color-neon-cyan: #38bdf8;
+  --color-neon-blue: #3b82f6;
+  --color-neon-violet: #a855f7;
+  --color-neon-violetlite: #c084fc;
+  --color-neon-magenta: #e0218a;
+  --color-neon-pink: #e0218a;
 
   /* Type scale */
   --font-sans:
@@ -18,11 +26,18 @@
   --font-mono:
     "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
     monospace;
+  --font-display:
+    "Rajdhani", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    sans-serif;
+  --font-jp:
+    "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif;
 }
 
 html {
   color-scheme: dark;
   scroll-behavior: smooth;
+  /* Keep anchored sections clear of the sticky navbar */
+  scroll-padding-top: 4.5rem;
 }
 
 body {
@@ -44,7 +59,8 @@ body {
   background-image: linear-gradient(
     90deg,
     var(--color-neon-cyan),
-    var(--color-neon-pink)
+    var(--color-neon-violet),
+    var(--color-neon-magenta)
   );
   -webkit-background-clip: text;
   background-clip: text;
@@ -57,6 +73,345 @@ body {
   backdrop-filter: saturate(140%) blur(12px);
   -webkit-backdrop-filter: saturate(140%) blur(12px);
   border-bottom: 1px solid var(--color-border);
+}
+
+/* ------------------------------------------------------------------ *
+ *  Cyber HUD effect layer (redesign)                                  *
+ * ------------------------------------------------------------------ */
+
+/* Neon text glows */
+.glow-soft {
+  text-shadow:
+    0 0 14px rgba(255, 255, 255, 0.22),
+    0 0 42px rgba(168, 85, 247, 0.18);
+}
+.glow-blue {
+  text-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
+}
+.glow-cyan {
+  text-shadow: 0 0 10px rgba(56, 189, 248, 0.65);
+}
+.glow-violet {
+  text-shadow: 0 0 12px rgba(168, 85, 247, 0.65);
+}
+
+/* Blinking terminal caret — append to any inline mono text */
+.cursor::after {
+  content: "";
+  display: inline-block;
+  width: 0.55em;
+  height: 1.05em;
+  margin-left: 0.18em;
+  background-color: currentColor;
+  vertical-align: text-bottom;
+  animation: caret-blink 1.1s linear infinite;
+}
+@keyframes caret-blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* CRT texture overlays */
+.scanlines {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.035) 0px,
+    rgba(255, 255, 255, 0.035) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+}
+.crt-fine {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgba(5, 6, 12, 0.5) 0px,
+    rgba(5, 6, 12, 0.5) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  opacity: 0.22;
+}
+
+/* Section canvas */
+.cyber-bg {
+  background-color: var(--color-ink);
+}
+
+/* One-shot chromatic glitch on load — requires data-text on the element */
+.glitch {
+  position: relative;
+  isolation: isolate;
+}
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.glitch::before {
+  color: var(--color-neon-cyan);
+  z-index: -1;
+  animation: glitch-a 1.9s steps(2, end) 1 both;
+}
+.glitch::after {
+  color: var(--color-neon-magenta);
+  z-index: -2;
+  animation: glitch-b 1.9s steps(2, end) 1 both;
+}
+@keyframes glitch-a {
+  0% {
+    opacity: 0.75;
+    transform: translate(-3px, 2px);
+    clip-path: inset(12% 0 58% 0);
+  }
+  25% {
+    transform: translate(3px, -1px);
+    clip-path: inset(64% 0 8% 0);
+  }
+  50% {
+    transform: translate(-2px, 1px);
+    clip-path: inset(38% 0 32% 0);
+  }
+  75% {
+    opacity: 0.55;
+    transform: translate(2px, 2px);
+    clip-path: inset(80% 0 4% 0);
+  }
+  100% {
+    opacity: 0;
+    transform: none;
+    clip-path: inset(0 0 100% 0);
+  }
+}
+@keyframes glitch-b {
+  0% {
+    opacity: 0.75;
+    transform: translate(3px, -2px);
+    clip-path: inset(58% 0 12% 0);
+  }
+  25% {
+    transform: translate(-3px, 1px);
+    clip-path: inset(8% 0 64% 0);
+  }
+  50% {
+    transform: translate(2px, -1px);
+    clip-path: inset(32% 0 38% 0);
+  }
+  75% {
+    opacity: 0.55;
+    transform: translate(-2px, -2px);
+    clip-path: inset(4% 0 80% 0);
+  }
+  100% {
+    opacity: 0;
+    transform: none;
+    clip-path: inset(100% 0 0 0);
+  }
+}
+
+/* Angular HUD clip shapes (paired outer/inner divs give a crisp 1px border) */
+.clip-bevel-sm {
+  clip-path: polygon(
+    10px 0,
+    100% 0,
+    100% calc(100% - 10px),
+    calc(100% - 10px) 100%,
+    0 100%,
+    0 10px
+  );
+}
+.holo-clip {
+  clip-path: polygon(
+    8px 0,
+    100% 0,
+    100% calc(100% - 8px),
+    calc(100% - 8px) 100%,
+    0 100%,
+    0 8px
+  );
+}
+.clip-mech {
+  clip-path: polygon(
+    20px 0,
+    calc(100% - 20px) 0,
+    100% 20px,
+    100% calc(100% - 20px),
+    calc(100% - 20px) 100%,
+    20px 100%,
+    0 calc(100% - 20px),
+    0 20px
+  );
+}
+.clip-dossier-a {
+  clip-path: polygon(
+    0 0,
+    calc(100% - 36px) 0,
+    100% 36px,
+    100% 100%,
+    36px 100%,
+    0 calc(100% - 36px)
+  );
+}
+.clip-dossier-b {
+  clip-path: polygon(
+    36px 0,
+    100% 0,
+    100% calc(100% - 36px),
+    calc(100% - 36px) 100%,
+    0 100%,
+    0 36px
+  );
+}
+.node-1 {
+  clip-path: polygon(0 0, calc(100% - 30px) 0, 100% 30px, 100% 100%, 0 100%);
+}
+.node-2 {
+  clip-path: polygon(
+    30px 0,
+    100% 0,
+    100% calc(100% - 30px),
+    calc(100% - 30px) 100%,
+    0 100%,
+    0 30px
+  );
+}
+.node-3 {
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 30px), calc(100% - 30px) 100%, 0 100%);
+}
+
+/* HUD frame hover lift (clip-path eats box-shadow, so use drop-shadow) */
+.hud {
+  transition:
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.35s ease;
+}
+.node-grp:hover .hud-hover {
+  transform: translateY(-5px);
+  filter: drop-shadow(0 0 20px rgba(168, 85, 247, 0.3));
+}
+
+.dossier {
+  transition:
+    transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.4s ease;
+}
+.dossier-grp:hover .dossier {
+  transform: translateY(-3px);
+  filter: drop-shadow(0 0 22px rgba(168, 85, 247, 0.25));
+}
+
+/* Sweeping scan line, revealed while hovering a HUD card */
+.scanbar {
+  top: 0;
+  opacity: 0;
+}
+.node-grp:hover .scanbar,
+.dossier-grp:hover .scanbar {
+  opacity: 1;
+  animation: scan-sweep 1.7s linear infinite;
+}
+@keyframes scan-sweep {
+  from {
+    top: 0%;
+  }
+  to {
+    top: 100%;
+  }
+}
+
+/* Corner reticles light up with the dossier hover */
+.reticle {
+  color: rgba(255, 255, 255, 0.25);
+  transition: color 0.3s ease;
+}
+.dossier-grp:hover .reticle {
+  color: var(--color-neon-cyan);
+}
+
+/* Slideshow arrows */
+.arrow {
+  opacity: 0.75;
+  transition: opacity 0.3s ease;
+}
+.arrow:hover {
+  opacity: 1;
+}
+
+/* Holographic action buttons (accent colour via --acc) */
+.holo {
+  transition: filter 0.3s ease;
+}
+.holo:hover {
+  filter: drop-shadow(0 0 10px color-mix(in srgb, var(--acc, #a855f7) 60%, transparent));
+}
+
+/* Status dots */
+.blink {
+  animation: caret-blink 1.4s linear infinite;
+}
+.pulse-dot {
+  animation: pulse-dot 1.8s ease-in-out infinite;
+}
+@keyframes pulse-dot {
+  0%,
+  100% {
+    box-shadow: 0 0 4px currentColor;
+    opacity: 1;
+  }
+  50% {
+    box-shadow: 0 0 12px currentColor;
+    opacity: 0.55;
+  }
+}
+
+/* Terminal form fields: glowing underline slides in on focus */
+.field-glow {
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 0 12px rgba(168, 85, 247, 0.7);
+}
+.field-focused .field-glow {
+  transform: scaleX(1);
+}
+
+/* Quick jitter on the transmit button label */
+.glitch-btn:hover .glitch-txt {
+  display: inline-block;
+  animation: glitch-jitter 0.35s steps(2, end) 1;
+}
+@keyframes glitch-jitter {
+  25% {
+    transform: translate(-2px, 1px);
+  }
+  50% {
+    transform: translate(2px, -1px);
+  }
+  75% {
+    transform: translate(-1px, -1px);
+  }
+}
+
+/* CSS-only entrance for elements swapped in after mount (form ↔ success) */
+.intro-up {
+  animation: intro-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes intro-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
